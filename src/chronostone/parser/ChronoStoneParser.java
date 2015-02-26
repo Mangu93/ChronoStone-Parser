@@ -52,7 +52,7 @@ public class ChronoStoneParser {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
 
-        String rutaArchivo = System.getProperty("user.home") + "/ejemploExcelJava.xls";
+        String rutaArchivo = System.getProperty("user.home") + "/ChronoStoneSheet.xls";
         File archivoXLS = new File(rutaArchivo);
         if (archivoXLS.exists() == false) {
             try {
@@ -68,6 +68,9 @@ public class ChronoStoneParser {
         Workbook libro = new HSSFWorkbook();
         FileOutputStream archivo = new FileOutputStream(archivoXLS);
         Sheet hoja = libro.createSheet("Chrono Stone Sheet");
+        /**
+         * Codigo a remover o investigar como hacerlo funcionar de verdad
+         */
         int check = check_created(hoja);
         if (check == xls_index) {
             inicializar_celdas(hoja);
@@ -75,6 +78,7 @@ public class ChronoStoneParser {
             xls_index = check + 1;
         }
         String name = "";
+        System.out.println("Archivo creado: "+ rutaArchivo);
         System.out.println("Introduzca nombre");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         name = br.readLine();
