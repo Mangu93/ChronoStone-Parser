@@ -38,6 +38,7 @@ public class ChronoStoneParser {
     static String GK = "Goalkeeper";
     static String ONE_STATS = "</p></div><div class=\"tabbertab\" title=\"Inazuma Eleven GO 2: Chrono Stone\"><p>";
     static String TWO_STATS = "<div class=\"tabber\"><div class=\"tabbertab\" title=\"Inazuma Eleven GO 2: Chrono Stone\"><p>";
+    static String AURA_HTML = "t Lvl.";
     static int xls_index = 0;
     static String gp = "GP";
     public static final String TP = "TP";
@@ -61,10 +62,7 @@ public class ChronoStoneParser {
                 System.err.println("Error on creating XLS");
             }
         }
-        if(archivoXLS.exists()) {
-        	Random rnd = new Random();
-        	rutaArchivo=System.getProperty("user.home") + "/ChronoStoneSheet"+(char)(48 + rnd.nextInt(42) ) + ".xls";
-        }
+
         Workbook libro = new HSSFWorkbook();
         FileOutputStream archivo = new FileOutputStream(archivoXLS);
         Sheet hoja = libro.createSheet("Chrono Stone Sheet");
@@ -92,10 +90,10 @@ public class ChronoStoneParser {
                 BufferedReader bf = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line = "";
                 while ((line = bf.readLine()) != null) {
-                    if (line.contains(ONE_STATS) || line.contains(TWO_STATS)) {
+                    if (line.contains(ONE_STATS) || line.contains(TWO_STATS) || line.contains(AURA_HTML)) {
                         //Primero los stats
                         List<String> stats = new ArrayList<>();
-                        for (int index = 0; index < 10; index++) {
+                        for (int index = 0; index < 13; index++) {
                             stats.add(bf.readLine());
                         }
                         add_stats(stats);
@@ -116,7 +114,7 @@ public class ChronoStoneParser {
             }
             System.out.println(tenmakun.print_stats());
             add_character_sheet(hoja);
-            System.out.println("Personaje aÃ±adido al fichero");
+            System.out.println("Personaje añadido al fichero");
             System.out.println("Introduzca nombre");
             name = br.readLine();
         }
@@ -151,8 +149,13 @@ public class ChronoStoneParser {
                 continue;
             }
             if (stat.contains(BLOCK)) {
-                tenmakun.setBlock(stat.substring(6));
+            	if(stat.length() > 8) {
+                tenmakun.setBlock(stat.substring(6,9));
                 continue;
+            	}else {
+            		tenmakun.setBlock(stat.substring(6,8));
+                    continue;
+            	}
             }
             if (stat.contains(A_CATCH)) {
                 tenmakun.setCatch_keeper(stat.substring(6));
